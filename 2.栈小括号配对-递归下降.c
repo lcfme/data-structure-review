@@ -32,24 +32,28 @@ char peekChar(CharReader *cr)
 }
 
 int isEOF(CharReader *cr);
-int analyse(CharReader *cr);
+int parse_expr(CharReader *cr);
 
 void parseParen(CharReader *cr)
 {
   readChar(cr);
   while (isEOF(cr) != 1 && peekChar(cr) != ')')
   {
-    analyse(cr);
+    parse_expr(cr);
   }
   readChar(cr);
 }
 
-int analyse(CharReader *cr)
+int parse_expr(CharReader *cr)
 {
   char ch = peekChar(cr);
   if (ch == '(')
   {
     parseParen(cr);
+  }
+  else if (ch != ')')
+  {
+    readChar(cr);
   }
 
   if (cr->at != cr->length)
@@ -66,7 +70,7 @@ int isEOF(CharReader *cr)
 
 int main()
 {
-  CharReader *cr = createCharReader("()");
-  int is = analyse(cr);
+  CharReader *cr = createCharReader("(as(d)f)");
+  int is = parse_expr(cr);
   printf("%d\n", is);
 }
