@@ -46,7 +46,7 @@ void lqueue_dequeue(LQueue *lq, int *elem)
   LNode *n = lq->front;
   if (n == 0)
   {
-    return 0;
+    return;
   }
   if (lq->rear == lq->front)
   {
