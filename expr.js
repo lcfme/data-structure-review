@@ -10,6 +10,10 @@ function is_whitespace(ch) {
   return ch && /\s/.test(ch) && ch;
 }
 
+function is_identifier(ch) {
+  return ch && /[A-z_$]/.test(ch) && ch;
+}
+
 class Token {
   constructor(Type, Val) {
     this.Type = Type;
@@ -45,6 +49,8 @@ class Lexer {
     } else if (ch == ')') {
       tok = new Token('RPAREN', ch);
       this.readChar();
+    } else if (is_identifier(ch)) {
+      tok = this.parseIdentifier();
     } else if (is_number(ch)) {
       tok = this.parseNumber();
     } else if (is_op(ch)) {
@@ -60,6 +66,17 @@ class Lexer {
       val += this.readChar();
     }
     return new Token('Number', parseInt(val, 10));
+  }
+  parseIdentifier() {
+    let val = '';
+    while (
+      !val.length
+        ? is_identifier(this.peekChar())
+        : is_identifier(this.peekChar()) || is_number(this.peekChar())
+    ) {
+      val += this.readChar();
+    }
+    return new Token('Identifier', val);
   }
   parseOp() {
     let val = '';
@@ -134,7 +151,7 @@ class InFix {
         throw new Error(`Invalid token. ${JSON.stringify(this.peek())}`);
       }
       this.next();
-    } else if (tok.Type === 'Number') {
+    } else if (tok.Type === 'Number' || tok.Type === 'Identifier') {
       expr = tok;
       this.next();
     } else if (tok.Type === 'Op' && (tok.Val === '+' || tok.Val === '-')) {
@@ -162,6 +179,6 @@ class InFix {
   }
 }
 
-var l = new Lexer('(-1) + +(1)');
+var l = new Lexer('a * (b+c) - d');
 var p = new InFix(l);
 p.parse();
