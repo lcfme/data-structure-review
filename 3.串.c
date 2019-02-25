@@ -79,10 +79,34 @@ int strindexof(char *src, char *sub)
   return index;
 }
 
+int strIndexOf2(char *src, char *sub)
+{
+  int i = 0;
+  while (*(src + i))
+  {
+    int m = 0;
+    int flag = 0;
+    while (*(src + i + m) && *(src + i + m) == *(sub + m))
+    {
+      if (++m == strlength(sub))
+      {
+        flag = 1;
+        break;
+      };
+    }
+    if (flag)
+    {
+      return i;
+    }
+    ++i;
+  }
+  return -1;
+}
+
 int main()
 {
   char *wele = "Hello World!";
-  char *dest = "llo";
-  int indexOf = strindexof(wele, dest);
+  char *dest = "Wor";
+  int indexOf = strIndexOf2(wele, dest);
   printf("%d\n", indexOf);
 }
