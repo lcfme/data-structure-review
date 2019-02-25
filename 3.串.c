@@ -71,6 +71,7 @@ int strindexof(char *src, char *sub)
     }
     else
     {
+      m = 0;
       index = -1;
       start = ++count;
     }
