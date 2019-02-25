@@ -9,7 +9,7 @@ void strcopy(char *dest, char *src)
     *(dest + i) = *(src + i);
     ++i;
   }
-  *(dest + ++i) = '\0';
+  *(dest + i) = '\0';
 }
 
 long strlength(char *src)
@@ -36,13 +36,52 @@ long strcompare(char *str1, char *str2)
   return str1len - str2len;
 }
 
+void strconcat(char *dest, char *src, int n)
+{
+  int i = 0;
+  while (*(src + i) && i < n)
+  {
+    *(dest + i) = *(src + i);
+    ++i;
+  }
+  *(dest + i) = '\0';
+}
+
+void strsubstr(char *sub, char *src, int at, int len)
+{
+  int i = 0;
+  while (*(src + at + i) && i < len)
+  {
+    *(sub + i) = *(src + at + i);
+    ++i;
+  }
+  *(sub + i) = '\0';
+}
+
+int strindexof(char *src, char *sub)
+{
+  int count = 0, index = -1, start = count, m = 0;
+  while (*(src + count) && m < strlength(sub))
+  {
+    if (*(src + start) == *(sub + m))
+    {
+      index = count;
+      ++m;
+      ++start;
+    }
+    else
+    {
+      index = -1;
+      start = ++count;
+    }
+  }
+  return index;
+}
+
 int main()
 {
   char *wele = "Hello World!";
-  char *dest;
-  long len = strlength(wele);
-  dest = (char *)malloc(sizeof(len + 1));
-  strcopy(dest, wele);
-  printf("%d\n", strlength(dest));
-  printf("%s\n", dest);
+  char *dest = "llo";
+  int indexOf = strindexof(wele, dest);
+  printf("%d\n", indexOf);
 }
