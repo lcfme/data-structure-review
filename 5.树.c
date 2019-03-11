@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#define max_size 100
 
 typedef struct BTNode
 {
@@ -38,4 +39,103 @@ void postorder(BTNode *p)
     postorder(p->rchild);
     Visit(p);
   }
+}
+
+void search(BTNode *btree, BTNode *r, int target)
+{
+  if (btree == 0 || r != 0)
+    return;
+  if (btree->data == target)
+  {
+    *r = *btree;
+  }
+  else
+  {
+    search(btree->lchild, r, target);
+    search(btree->rchild, r, target);
+  }
+}
+
+void level(BTNode *p)
+{
+  int front, rear;
+  BTNode *que[max_size];
+  front = rear = 0;
+  BTNode *q;
+
+  if (p != 0)
+  {
+    rear = (rear + 1) % max_size;
+    que[rear] = p;
+    while (front != rear)
+    {
+      front = (front + 1) / max_size;
+      q = que[front];
+      Visit(q);
+      if (q->lchild)
+      {
+        rear = (rear + 1) % max_size;
+        que[rear] = q->lchild;
+      }
+      if (q->rchild)
+      {
+        rear = (rear + 1) % max_size;
+        que[rear] = q->rchild;
+      }
+    }
+  }
+}
+
+typedef struct
+{
+  BTNode *p;
+  int lno;
+} St;
+
+int maxNode(BTNode *b)
+{
+  if (b == 0)
+  {
+    return 0;
+  }
+  St que[max_size];
+  BTNode *p;
+  int rear, front = 0;
+  int Lno;
+  ++rear;
+  que[rear].p = b;
+  que[rear].lno = 1;
+  while (front != rear)
+  {
+    ++front;
+    p = que[front].p;
+    Lno = que[front].lno;
+    if (p->lchild)
+    {
+      rear++;
+      que[rear].p = p->lchild;
+      que[rear].lno = Lno + 1;
+    }
+    if (p->rchild)
+    {
+      rear++;
+      que[rear].p = p->rchild;
+      que[rear].lno = Lno + 1;
+    }
+  }
+  int max = 0;
+  for (int i = 1; i <= Lno; ++i)
+  {
+    int count = 0;
+    for (int j = 1; j <= rear; ++j)
+    {
+      if (que[j].lno == i)
+        ++count;
+    }
+    if (count > max)
+    {
+      max = count;
+    }
+  }
+  return max;
 }
