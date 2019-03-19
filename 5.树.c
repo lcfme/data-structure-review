@@ -160,7 +160,7 @@ void preorderNonrecursion(BTNode *bt)
     {
       Stack[++top] = p->rchild;
     }
-    if (p->rchild != 0)
+    if (p->lchild != 0)
     {
       Stack[++top] = p->lchild;
     }
@@ -220,6 +220,78 @@ void postorderNonRecursion(BTNode *bt)
     }
   }
 
+  while (top2 != -1)
+  {
+    p = Stack2[top2--];
+    Visit(p);
+  }
+}
+
+void preOrderBTTraversalR(BTNode *bt)
+{
+  if (bt == 0)
+  {
+    return;
+  }
+  Visit(bt);
+  preOrderBTTraversalR(bt->lchild);
+  preOrderBTTraversalR(bt->rchild);
+}
+
+void preOrderBTTraversal(BTNode *bt)
+{
+  if (bt == 0)
+  {
+    return;
+  }
+
+  BTNode *Stack[max_size];
+  BTNode *p;
+  int top = -1;
+  p = bt;
+
+  Stack[++top] = p;
+
+  while (top != -1)
+  {
+    p = Stack[top--];
+    Visit(p);
+    if (p->lchild)
+    {
+      Stack[++top] = p->lchild;
+    }
+    if (p->rchild)
+    {
+      Stack[++top] = p->rchild;
+    }
+  }
+}
+
+void postOrderTraversal(BTNode *bt)
+{
+  if (bt == 0)
+  {
+    return;
+  }
+  BTNode *Stack1[max_size];
+  BTNode *Stack2[max_size];
+  int top1 = -1;
+  int top2 = -1;
+  BTNode *p = bt;
+  Stack1[++top1] = bt;
+  while (top1 != -1)
+  {
+    p = Stack1[top1--];
+    Stack2[++top2] = p;
+    if (p->lchild)
+    {
+      Stack1[++top1] = p->lchild;
+    }
+    if (p->rchild)
+    {
+      Stack1[++top1] = p->rchild;
+    }
+  }
   while (top2 != -1)
   {
     p = Stack2[top2--];
