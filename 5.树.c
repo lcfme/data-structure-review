@@ -139,3 +139,90 @@ int maxNode(BTNode *b)
   }
   return max;
 }
+
+void preorderNonrecursion(BTNode *bt)
+{
+  if (bt == 0)
+  {
+    return;
+  }
+
+  BTNode *Stack[max_size];
+  int top = -1;
+  BTNode *p;
+  Stack[++top] = bt;
+
+  while (top != -1)
+  {
+    p = Stack[top--];
+    Visit(p);
+    if (p->rchild != 0)
+    {
+      Stack[++top] = p->rchild;
+    }
+    if (p->rchild != 0)
+    {
+      Stack[++top] = p->lchild;
+    }
+  }
+}
+
+void inorderNonrecursion(BTNode *bt)
+{
+  if (bt == 0)
+  {
+    return;
+  }
+  BTNode *Stack[max_size];
+  int top = -1;
+  BTNode *p;
+  p = bt;
+  while (top != -1 || p != 0)
+  {
+    while (p != 0)
+    {
+      Stack[++top] = p;
+      p = p->lchild;
+    }
+    if (top != -1)
+    {
+      p = Stack[top--];
+      Visit(p);
+      p = p->rchild;
+    }
+  }
+}
+
+void postorderNonRecursion(BTNode *bt)
+{
+  if (bt == 0)
+  {
+    return;
+  }
+  BTNode *Stack1[max_size];
+  int top1 = -1;
+  BTNode *Stack2[max_size];
+  int top2 = -1;
+  BTNode *p = 0;
+  Stack1[++top1] = bt;
+  while (top1 != -1)
+  {
+    p = Stack1[top1--];
+    Stack2[++top2] = p;
+
+    if (p->lchild != 0)
+    {
+      Stack1[++top1] = p->lchild;
+    }
+    if (p->rchild != 0)
+    {
+      Stack1[++top1] = p->rchild;
+    }
+  }
+
+  while (top2 != -1)
+  {
+    p = Stack2[top2--];
+    Visit(p);
+  }
+}
